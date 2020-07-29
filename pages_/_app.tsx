@@ -31,6 +31,7 @@ export default class MyApp extends App {
     return (
       <ThemeProvider theme={theme}>
         <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           {/* Import CSS for nprogress */}
           <link rel="stylesheet" type="text/css" href="/nprogress.css" />
         </Head>
@@ -38,6 +39,7 @@ export default class MyApp extends App {
           value={{
             fetcher,
             onError: (err) => {
+              // eslint-disable-next-line no-console
               console.error(err);
             },
           }}
