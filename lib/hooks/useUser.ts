@@ -6,10 +6,13 @@ export default function useUser({
   redirectTo = false,
   redirectIfFound = false,
 }: {
-  redirectTo: any,
-  redirectIfFound: any,
-}) {
+  redirectTo?: any,
+  redirectIfFound?: any,
+} = {}) {
   const { data: user, mutate: mutateUser, error } = useSWR('/api/user');
+  console.log(`useUser Data: ${user}`);
+
+  console.log('useUser called!');
 
   const loading = !user && !error;
   const loggedOut = error && error.status === 403;

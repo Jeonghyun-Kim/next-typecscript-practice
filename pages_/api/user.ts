@@ -7,14 +7,36 @@ interface RequestWithSession extends NextApiRequest {
 }
 
 export default withSession(async (req: RequestWithSession, res: NextApiResponse) => {
-  const accessToken = req.session.get('access_token');
-  // const refreshToken = req.session.get('refresh_token');
+  console.log('api/user called!');
+  const user = req.session.get('user');
+
+  if (!user) {
+    return res.json({
+      isLoggedIn: false,
+    });
+  }
+
+  const { accessToken, refreshToken } = user;
 
   try {
-    const { info } = await fetcher({
-      url: '/user/info',
-      token: accessToken,
-    });
+    const { newAccessToken, ...info } = await fetcher('http://kay.ondisplay.co.kr/user/info', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }, { accessToken, refreshToken });
+
+    console.log(`info: ${JSON.stringify(info)}`);
+
+    if (newAccessToken) {
+      req.session.set('user', {
+        isLoggedIn: true,
+        accessToken: newAccessToken,
+        refreshToken,
+      });
+      await req.session.save();
+
+      console.log('renewed token saved!');
+    }
 
     if (info) {
       return res.json({

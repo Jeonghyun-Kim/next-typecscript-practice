@@ -3,20 +3,72 @@ interface ErrorWithResponse extends Error {
   data: any;
 }
 
-export default async (args:
-{ url: string, method?: string, token?: string, body?: string }) => {
+const refresh = async (tokens: { accessToken: string, refreshToken: string }) => {
+  const { accessToken, refreshToken } = tokens;
   try {
-    const response = await fetch(`${process.env.API_URL}/${args.url}`, {
-      method: args.method,
-      headers: args.token ? {
-        Authorization: `Bearer ${args.token}`,
-      } : undefined,
-      body: args.body,
+    console.log('refresh called!');
+    const response = await fetch('http://kay.ondisplay.co.kr/auth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ refreshToken }),
     });
 
-    const data = response.json();
+    const { accessToken: newAccessToken, error } = await response.json();
+
+    if (error) {
+      return { error };
+    }
+
+    return { newAccessToken, error };
+  } catch (error) {
+    console.log('refresh failed!');
+    return { error };
+  }
+};
+
+export default async function fetcher(
+  url: string,
+  option?: any,
+  tokens?: { accessToken: string, refreshToken: string },
+) {
+  try {
+    console.log(`fetcher called! url: ${url}`);
+
+    let response = await fetch(url, option);
+
+    if (tokens && response.status === 419) {
+      console.log('token expired');
+      const {
+        newAccessToken,
+      } = await refresh(tokens);
+
+      response = await fetch(url, {
+        ...option,
+        headers: {
+          ...option.headers,
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('token renewed');
+        console.log(`response with renewed token: ${JSON.stringify(data)}`);
+        return {
+          ...data,
+          newAccessToken,
+        };
+      }
+    }
+
+    const data = await response.json();
 
     if (response.ok) {
+      console.log(`response only with data: ${JSON.stringify(data)}`);
       return data;
     }
 
@@ -26,9 +78,10 @@ export default async (args:
 
     throw error;
   } catch (error) {
+    console.error('fetcher error', error);
     if (!error.data) {
       error.data = { message: error.message };
     }
     throw error;
   }
-};
+}

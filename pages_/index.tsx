@@ -15,6 +15,12 @@ export default function Home() {
       <Link href="/about">
         <a>About</a>
       </Link>
+      <Link href="/login">
+        <a>login</a>
+      </Link>
+      <Link href="/profile">
+        <a>profile</a>
+      </Link>
     </>
   );
 }

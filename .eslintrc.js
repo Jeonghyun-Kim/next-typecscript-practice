@@ -20,6 +20,7 @@ module.exports = {
   rules: {
     'react/jsx-one-expression-per-line': 0,
     'jsx-a11y/anchor-is-valid': 0,
+    'jsx-a11y/label-has-associated-control': 0,
   },
   settings: {
     'import/resolver': {
