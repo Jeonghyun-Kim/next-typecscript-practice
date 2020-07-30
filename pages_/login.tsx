@@ -15,6 +15,8 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // TODO: VALIDATION.
+
     const body = {
       input: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
@@ -22,7 +24,7 @@ export default function Login() {
 
     try {
       await mutateUser(
-        fetcher('http://localhost:3000/api/login', {
+        fetcher('/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

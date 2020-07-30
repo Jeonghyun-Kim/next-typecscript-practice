@@ -1,3 +1,5 @@
+import { API_URL } from '../defines';
+
 interface ErrorWithResponse extends Error {
   response: Response;
   data: any;
@@ -7,7 +9,7 @@ const refresh = async (tokens: { accessToken: string, refreshToken: string }) =>
   const { accessToken, refreshToken } = tokens;
   try {
     console.log('refresh called!');
-    const response = await fetch('http://kay.ondisplay.co.kr/auth/token', {
+    const response = await fetch(`${API_URL}/auth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

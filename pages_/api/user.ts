@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import withSession from '../../lib/session';
 import fetcher from '../../lib/fetcher';
 
+import { API_URL } from '../../defines';
+
 interface RequestWithSession extends NextApiRequest {
   session: any;
 }
@@ -19,7 +21,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
   const { accessToken, refreshToken } = user;
 
   try {
-    const { newAccessToken, ...info } = await fetcher('http://kay.ondisplay.co.kr/user/info', {
+    const { newAccessToken, ...info } = await fetcher(`${API_URL}/user/info`, {
       headers: accessToken ? {
         Authorization: `Bearer ${accessToken}`,
       } : undefined,
@@ -49,7 +51,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
       isLoggedIn: false,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     const { response: fetchResponse } = error;
     return res.status(fetchResponse?.status || 500).json(error.data);
   }

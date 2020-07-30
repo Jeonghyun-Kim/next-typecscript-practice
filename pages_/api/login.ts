@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import withSession from '../../lib/session';
 import fetcher from '../../lib/fetcher';
 
+import { API_URL } from '../../defines';
+
 interface RequestWithSession extends NextApiRequest {
   session: any;
 }
@@ -10,7 +12,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
   const { input, password } = req.body;
   try {
     console.log('login api called!');
-    const { accessToken, refreshToken } = await fetcher('http://kay.ondisplay.co.kr/auth/login', {
+    const { accessToken, refreshToken } = await fetcher(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
