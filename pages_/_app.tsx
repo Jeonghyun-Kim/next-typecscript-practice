@@ -37,6 +37,7 @@ export default class MyApp extends App {
         </Head>
         <SWRConfig
           value={{
+            refreshInterval: 5000,
             fetcher,
             onError: (err) => {
               // eslint-disable-next-line no-console

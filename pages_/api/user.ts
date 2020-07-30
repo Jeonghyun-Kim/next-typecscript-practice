@@ -20,9 +20,9 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
 
   try {
     const { newAccessToken, ...info } = await fetcher('http://kay.ondisplay.co.kr/user/info', {
-      headers: {
+      headers: accessToken ? {
         Authorization: `Bearer ${accessToken}`,
-      },
+      } : undefined,
     }, { accessToken, refreshToken });
 
     console.log(`info: ${JSON.stringify(info)}`);

@@ -4,10 +4,10 @@ import useUser from '../lib/hooks/useUser';
 import fetcher from '../lib/fetcher';
 
 export default function Profile() {
-  const { user, mutateUser } = useUser({ redirectTo: '/login' });
+  const { user, mutateUser, loading } = useUser({ redirectTo: '/login' });
   const router = useRouter();
 
-  if (!user || user.isLoggedIn === false) {
+  if (loading) {
     return <p>Loading...</p>;
   }
 
