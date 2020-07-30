@@ -8,7 +8,6 @@ interface ErrorWithResponse extends Error {
 const refresh = async (tokens: { accessToken: string, refreshToken: string }) => {
   const { accessToken, refreshToken } = tokens;
   try {
-    console.log('refresh called!');
     const response = await fetch(`${API_URL}/auth/token`, {
       method: 'POST',
       headers: {
@@ -26,7 +25,6 @@ const refresh = async (tokens: { accessToken: string, refreshToken: string }) =>
 
     return { newAccessToken, error };
   } catch (error) {
-    console.log('refresh failed!');
     return { error };
   }
 };
@@ -37,12 +35,9 @@ export default async function fetcher(
   tokens?: { accessToken: string, refreshToken: string },
 ) {
   try {
-    console.log(`fetcher called! url: ${url}`);
-
     let response = await fetch(url, option);
 
     if (tokens && response.status === 419) {
-      console.log('token expired');
       const {
         newAccessToken,
       } = await refresh(tokens);
@@ -58,8 +53,6 @@ export default async function fetcher(
       const data = await response.json();
 
       if (response.ok) {
-        console.log('token renewed');
-        console.log(`response with renewed token: ${JSON.stringify(data)}`);
         return {
           ...data,
           newAccessToken,
@@ -70,7 +63,6 @@ export default async function fetcher(
     const data = await response.json();
 
     if (response.ok) {
-      console.log(`response only with data: ${JSON.stringify(data)}`);
       return data;
     }
 
@@ -80,7 +72,6 @@ export default async function fetcher(
 
     throw error;
   } catch (error) {
-    console.error('fetcher error', error);
     if (!error.data) {
       error.data = { message: error.message };
     }

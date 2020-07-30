@@ -9,7 +9,6 @@ interface RequestWithSession extends NextApiRequest {
 }
 
 export default withSession(async (req: RequestWithSession, res: NextApiResponse) => {
-  console.log('api/user called!');
   const user = req.session.get('user');
 
   if (!user) {
@@ -27,8 +26,6 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
       } : undefined,
     }, { accessToken, refreshToken });
 
-    console.log(`info: ${JSON.stringify(info)}`);
-
     if (newAccessToken) {
       req.session.set('user', {
         isLoggedIn: true,
@@ -36,8 +33,6 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
         refreshToken,
       });
       await req.session.save();
-
-      console.log('renewed token saved!');
     }
 
     if (info) {
@@ -51,7 +46,6 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
       isLoggedIn: false,
     });
   } catch (error) {
-    console.error(error);
     const { response: fetchResponse } = error;
     return res.status(fetchResponse?.status || 500).json(error.data);
   }
