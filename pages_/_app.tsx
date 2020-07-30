@@ -24,6 +24,9 @@ export default class MyApp extends App {
     // initGA();
     // logPageView();
     // Router.events.on('routeChangeCompolete', logPageView);
+    window.onunload = () => {
+      fetcher('/api/logout');
+    };
   }
 
   render() {
