@@ -1,4 +1,8 @@
 {
   "check_network": "Check Network Status.",
-  "uncaught_error": "An Error Occured."
+  "uncaught_error": "An Error Occured.",
+  "error_code": {
+    "104": "Password Wrong.",
+    "103": "No Such User."
+  }
 }

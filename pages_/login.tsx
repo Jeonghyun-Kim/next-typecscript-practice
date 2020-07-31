@@ -37,12 +37,10 @@ export default function Login() {
         accessToken,
         refreshToken,
       });
-
-      return;
     } catch (error) {
       const { error: errorCode } = error.data;
       if (errorCode) {
-        setErrorMessage(t(`errorCode.${errorCode}`));
+        setErrorMessage(t(`common:error_code.${errorCode}`));
       } else if (error.message && error.message === 'Failed to fetch') {
         setErrorMessage(t('common:check_network'));
       } else {
