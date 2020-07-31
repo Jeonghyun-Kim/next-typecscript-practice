@@ -24,8 +24,9 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
     req.session.set('user', user);
     await req.session.save();
 
-    return res.json({ user, error: 0 });
+    return res.json({ accessToken, refreshToken });
   } catch (error) {
+    // console.log(error);
     const { response: fetchResponse } = error;
     return res.status(fetchResponse?.status || 500).json(error.data);
   }

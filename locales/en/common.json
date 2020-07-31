@@ -1,3 +1,4 @@
 {
-  "hello": "hello"
+  "check_network": "Check Network Status.",
+  "uncaught_error": "An Error Occured."
 }

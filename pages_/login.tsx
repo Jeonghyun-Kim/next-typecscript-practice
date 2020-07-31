@@ -1,4 +1,5 @@
 import React from 'react';
+import useTranslation from 'next-translate/useTranslation';
 
 import useUser from '../lib/hooks/useUser';
 import LoginForm from '../components/Form/LoginForm';
@@ -10,12 +11,12 @@ export default function Login() {
     redirectIfFound: true,
   });
 
+  const { t } = useTranslation();
+
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // TODO: VALIDATION.
 
     const body = {
       input: e.currentTarget.email.value,
@@ -23,17 +24,30 @@ export default function Login() {
     };
 
     try {
-      await mutateUser(
-        fetcher('/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }),
-      );
+      const { accessToken, refreshToken } = await fetcher('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      mutateUser({
+        isLoggedIn: true,
+        accessToken,
+        refreshToken,
+      });
+
+      return;
     } catch (error) {
-      setErrorMessage(error.data.message);
+      const { error: errorCode } = error.data;
+      if (errorCode) {
+        setErrorMessage(t(`errorCode.${errorCode}`));
+      } else if (error.message && error.message === 'Failed to fetch') {
+        setErrorMessage(t('common:check_network'));
+      } else {
+        setErrorMessage(t('common:uncaught_error'));
+      }
     }
   };
 
