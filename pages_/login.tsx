@@ -2,8 +2,10 @@ import React from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
 import useUser from '../lib/hooks/useUser';
-import LoginForm from '../components/Form/LoginForm';
 import fetcher from '../lib/fetcher';
+
+import LoginForm from '../components/Form/LoginForm';
+import TextLink from '../components/TextLink';
 
 export default function Login() {
   const { mutateUser } = useUser({
@@ -50,8 +52,11 @@ export default function Login() {
   };
 
   return (
-    <div className="login">
-      <LoginForm errorMessage={errorMessage} onSubmit={handleSubmit} />
-    </div>
+    <>
+      <TextLink href="/">Home</TextLink>
+      <div className="login">
+        <LoginForm errorMessage={errorMessage} onSubmit={handleSubmit} />
+      </div>
+    </>
   );
 }

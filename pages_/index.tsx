@@ -1,7 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import styled from 'styled-components';
-// import cn from 'classnames';
+
+import TextLink from '../components/TextLink';
 
 const Title = styled.h1`
   font-size: 50px;
@@ -12,15 +12,9 @@ export default function Home() {
   return (
     <>
       <Title>My page</Title>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-      <Link href="/login">
-        <a>login</a>
-      </Link>
-      <Link href="/profile">
-        <a>profile</a>
-      </Link>
+      <TextLink href="/about">About</TextLink>
+      <TextLink href="/login">Login</TextLink>
+      <TextLink href="/profile">Profile</TextLink>
     </>
   );
 }
