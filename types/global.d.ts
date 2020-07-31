@@ -1,5 +1,5 @@
 declare module 'next-translate/useTranslation' {
-  const useTranslation: {
+  const useTranslation: () => {
     t: any;
     lang: any;
   };
