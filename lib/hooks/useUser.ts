@@ -10,6 +10,7 @@ export default function useUser({
   redirectIfFound?: any,
 } = {}) {
   const { data: user, mutate: mutateUser, error } = useSWR('/api/user');
+  // const { data: accessToken } = useSWR('/api/token');
 
   const loading = !user && !error;
   const loggedOut = error && error.status === 403;

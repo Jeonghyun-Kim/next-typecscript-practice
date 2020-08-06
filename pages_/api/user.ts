@@ -37,6 +37,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
 
     if (info) {
       return res.json({
+        accessToken: newAccessToken ?? accessToken,
         isLoggedIn: true,
         ...info,
       });
