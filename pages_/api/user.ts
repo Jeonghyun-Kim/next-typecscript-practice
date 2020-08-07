@@ -14,30 +14,47 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
   if (!user) {
     return res.json({
       isLoggedIn: false,
+      isArtist: false,
     });
   }
 
   const { accessToken, refreshToken } = user;
 
   try {
-    const { newAccessToken, ...info } = await fetcher(`${API_URL}/user/info`, {
+    let response = await fetch(`${API_URL}/user/info`, {
       headers: accessToken ? {
         Authorization: `Bearer ${accessToken}`,
       } : undefined,
-    }, { accessToken, refreshToken });
+    });
 
-    if (newAccessToken) {
+    if (response.status === 419) {
+      const { accessToken: newAccessToken } = await fetcher(`${API_URL}/auth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      response = await fetch(`${API_URL}/user/info`, {
+        headers: {
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+      });
+
       req.session.set('user', {
-        isLoggedIn: true,
+        ...user,
         accessToken: newAccessToken,
-        refreshToken,
       });
       await req.session.save();
     }
 
+    const { info } = await response.json();
+
     if (info) {
       return res.json({
-        accessToken: newAccessToken ?? accessToken,
+        accessToken,
         isLoggedIn: true,
         ...info,
       });
@@ -45,6 +62,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
 
     return res.json({
       isLoggedIn: false,
+      isArtist: false,
     });
   } catch (error) {
     const { response: fetchResponse } = error;

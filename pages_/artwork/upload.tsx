@@ -10,11 +10,13 @@ import fetcher from '../../lib/fetcher';
 import { API_URL } from '../../defines';
 
 export default function ArtworkUpload() {
-  const { user } = useUser({
+  const { user, loading } = useUser({
     redirectTo: '/login',
   });
 
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
+  if (loading) return <div>loading...</div>;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,8 +50,8 @@ export default function ArtworkUpload() {
   return (
     <>
       <TextLink href="/">Home</TextLink>
-      <p>token: {user && user.accessToken}</p>
-      <p>{user && user.info.user.nickname}님 안녕하세요!</p>
+      <p>token: {user.accessToken}</p>
+      <p>{user.user.nickname}님 안녕하세요!</p>
       <UploadForm errorMessage={errorMessage} onSubmit={handleSubmit} />
     </>
   );
