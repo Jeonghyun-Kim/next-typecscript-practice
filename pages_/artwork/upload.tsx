@@ -14,9 +14,9 @@ export default function ArtworkUpload() {
     redirectTo: '/login',
   });
 
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-
   if (loading) return <div>loading...</div>;
+
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export default function ArtworkUpload() {
     <>
       <TextLink href="/">Home</TextLink>
       <p>token: {user.accessToken}</p>
-      <p>{user.user.nickname}님 안녕하세요!</p>
+      <p>{user.user && user.user.nickname}님 안녕하세요!</p>
       <UploadForm errorMessage={errorMessage} onSubmit={handleSubmit} />
     </>
   );

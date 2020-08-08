@@ -6,6 +6,10 @@ interface RequestWithSession extends NextApiRequest {
 }
 
 export default withSession(async (req: RequestWithSession, res: NextApiResponse) => {
-  const { accessToken, refreshToken } = req.session.get('user');
-  return res.json({ accessToken, refreshToken });
+  const user = req.session.get('user');
+  if (user) {
+    return res.json({ ...user });
+  }
+
+  return res.json({ hello: 'hello world' });
 });
