@@ -18,7 +18,8 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
     });
   }
 
-  const { accessToken, refreshToken } = user;
+  const { refreshToken } = user;
+  let { accessToken } = user;
 
   try {
     let response = await fetch(`${API_URL}/user/info`, {
@@ -48,6 +49,8 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
         accessToken: newAccessToken,
       });
       await req.session.save();
+
+      accessToken = newAccessToken;
     }
 
     const { info } = await response.json();

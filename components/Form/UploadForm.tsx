@@ -21,7 +21,7 @@ const Form = styled.form`
   }
 `;
 
-export default function LoginForm({ errorMessage, onSubmit }:
+export default function UploadForm({ errorMessage, onSubmit }:
 { errorMessage: string | null, onSubmit: (e: React.FormEvent<HTMLFormElement>) => void }) {
   return (
     <Form onSubmit={onSubmit}>

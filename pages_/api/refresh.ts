@@ -10,8 +10,6 @@ interface RequestWithSession extends NextApiRequest {
 export default withSession(async (req: RequestWithSession, res: NextApiResponse) => {
   const user = req.session.get('user');
 
-  console.log(`refresh called! user: ${user}`);
-
   if (!user) {
     return res.status(403).json({ errorMessage: 'login first...' });
   }
@@ -19,7 +17,7 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
   const { accessToken, refreshToken } = user;
 
   try {
-    const { accessToken: newAccessToken, error } = await fetcher(`${API_URL}/auth/token`, {
+    const { accessToken: newAccessToken } = await fetcher(`${API_URL}/auth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,13 +26,11 @@ export default withSession(async (req: RequestWithSession, res: NextApiResponse)
       body: JSON.stringify({ refreshToken }),
     });
 
-    if (!error) {
-      req.session.set('user', {
-        ...user,
-        accessToken: newAccessToken,
-      });
-      await req.session.save();
-    }
+    req.session.set('user', {
+      ...user,
+      accessToken: newAccessToken,
+    });
+    await req.session.save();
 
     return res.json({ accessToken: newAccessToken });
   } catch (error) {

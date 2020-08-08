@@ -3,6 +3,7 @@
   "uncaught_error": "An Error Occured.",
   "error_code": {
     "104": "Password Wrong.",
-    "103": "No Such User."
+    "103": "No Such User.",
+    "101": "Email Already Occupied."
   }
 }

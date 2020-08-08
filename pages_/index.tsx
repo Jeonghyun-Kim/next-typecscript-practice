@@ -14,6 +14,7 @@ export default function Home() {
       <Title>My page</Title>
       <TextLink href="/about">About</TextLink>
       <TextLink href="/login">Login</TextLink>
+      <TextLink href="/signup">Signup</TextLink>
       <TextLink href="/profile">Profile</TextLink>
       <TextLink href="/artwork/upload">Upload</TextLink>
     </>
