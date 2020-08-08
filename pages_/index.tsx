@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import useUser from '../lib/hooks/useUser';
 import TextLink from '../components/TextLink';
 
 const Title = styled.h1`
@@ -9,6 +10,8 @@ const Title = styled.h1`
 `;
 
 export default function Home() {
+  const { user } = useUser();
+
   return (
     <>
       <Title>My page</Title>
@@ -17,6 +20,9 @@ export default function Home() {
       <TextLink href="/signup">Signup</TextLink>
       <TextLink href="/profile">Profile</TextLink>
       <TextLink href="/artwork/upload">Upload</TextLink>
+      {user && user.admin && (
+        <TextLink href="/admin">Admin</TextLink>
+      )}
     </>
   );
 }
