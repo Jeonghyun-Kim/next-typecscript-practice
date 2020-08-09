@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <>
-      <Title>My page</Title>
+      <Title>onDisplay</Title>
       <TextLink href="/about">About</TextLink>
       <TextLink href="/login">Login</TextLink>
       <TextLink href="/signup">Signup</TextLink>
