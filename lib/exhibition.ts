@@ -10,7 +10,9 @@ export const getExhibitions = async (accessToken: string, setExhibitions: React.
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    setExhibitions(info.exhibitions);
+    if (info) {
+      setExhibitions(info.exhibitions);
+    }
   } catch (error) {
     throw new Error('Fetch Error!');
   }
